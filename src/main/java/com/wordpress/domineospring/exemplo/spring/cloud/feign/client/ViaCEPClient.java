@@ -1,16 +1,14 @@
 package com.wordpress.domineospring.exemplo.spring.cloud.feign.client;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.wordpress.domineospring.exemplo.spring.cloud.feign.model.Endereco;
 
-@Component
-public class ViaCEPClient {
+@FeignClient(url = "https://viacep.com.br/ws/", name = "viacep")
+public interface ViaCEPClient {
 
-	public Endereco buscaEnderecoPor(String cep) {
-		RestTemplate template = new RestTemplate();
-		return template.getForObject("https://viacep.com.br/ws/{cep}/json", Endereco.class, cep);
-	}
-
+	@GetMapping("{cep}/json")
+	Endereco buscaEnderecoPor(@PathVariable("cep") String cep);
 }
